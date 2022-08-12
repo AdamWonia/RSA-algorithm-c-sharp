@@ -24,6 +24,18 @@ namespace RSA
             return a;
         }
 
+        public (int a, int xPrev, int yPrev) ExtendedEuclidesAlgorithm(int a, int b)
+        {
+            (int x, int xPrev, int y, int yPrev) = (0, 1, 1, 0);
+            while (b != 0)
+            {
+                int floorQuotient = a;
+                (a, b) = (b, a - b * floorQuotient);
+                (xPrev, x) = (x, xPrev - x * floorQuotient);
+                (yPrev, y) = (y, yPrev - y * floorQuotient);
+            }
 
+            return (a, xPrev, yPrev);
+        }
     }
 }
