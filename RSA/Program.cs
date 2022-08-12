@@ -24,7 +24,7 @@ namespace RSA
             return a;
         }
 
-        public (int a, int xPrev, int yPrev) ExtendedEuclidesAlgorithm(int a, int b)
+        public (int a, int xPrev, int yPrev) ExtendedEuclideanAlgorithm(int a, int b)
         {
             (int x, int xPrev, int y, int yPrev) = (0, 1, 1, 0);
             while (b != 0)
@@ -36,6 +36,19 @@ namespace RSA
             }
 
             return (a, xPrev, yPrev);
+        }
+
+        public int CountE(int phi)
+        {
+            Random rand = new Random();
+            while (true)
+            {
+                int e = rand.Next(2, phi);
+                if (GreatestCommonDivisor(e, phi) == 1)
+                {
+                    return e;
+                }
+            }
         }
     }
 }
