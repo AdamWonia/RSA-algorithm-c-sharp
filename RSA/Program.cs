@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RSA
 {
@@ -49,6 +52,51 @@ namespace RSA
                     return e;
                 }
             }
+        }
+
+        public string Encrypt(string message, int size)
+        {
+            try
+            {
+                string[] file = File.ReadAllLines(@"Keys/public.txt"); // open file, read and close
+                int n = int.Parse(file[0]);
+                int e = int.Parse(file[1]);
+
+                List<int> encryptedData = new List<int>();
+                int encryptedMessage = -1;
+
+                if (message.Length > 0)
+                {
+                    encryptedMessage = (int)message[0];
+                }
+
+                for (int i = 1; i < message.Length; i++)
+                {
+                    if (i % size == 0)
+                    {
+                        encryptedData.Add(encryptedMessage);
+                        encryptedMessage = 0;
+                    }
+                    encryptedMessage = encryptedMessage * 1000 + (int)(message[i]);
+                }
+                encryptedData.Add(encryptedMessage);
+
+                for (int i = 0; i < encryptedData.Count; i++)
+                {
+                    encryptedData[i] = (int)Math.Pow(encryptedData[i], e) % n;
+                }
+
+                return string.Join(" ", encryptedData);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string Decrypt()
+        {
+
         }
     }
 }
