@@ -94,9 +94,35 @@ namespace RSA
             }
         }
 
-        public string Decrypt()
+        public string Decrypt(string DataBlock, int size)
         {
+            string[] file = File.ReadAllLines(@"Keys/private.txt");
+            int n = int.Parse(file[0]);
+            int d = int.Parse(file[1]);
 
+            string[] DataBlockList = DataBlock.Split(" ");
+            List<int> DataBlockInt = new List<int>();
+
+            foreach (string item in DataBlockList)
+            {
+                DataBlockInt.Add(int.Parse(item));
+            }
+
+            string message = string.Empty;
+
+            for (int i = 0; i < DataBlockInt.Count; i++)
+            {
+                DataBlockInt[i] = (int)Math.Pow(DataBlockInt[i], d) % n;
+                string x = string.Empty;
+                for (int j = 0; j < size; j++)
+                {
+                    x = (char)(DataBlockInt[j] % 1000) + x;
+                    DataBlockInt[j] /= 1000; // int_blok_danych[i] //= 1000
+                }
+                message += x;
+            }
+
+            return message;
         }
     }
 }
