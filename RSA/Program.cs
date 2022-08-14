@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace RSA
 {
@@ -9,7 +10,12 @@ namespace RSA
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            RSA rsa = new RSA();
+            // Create new keys:
+            rsa.CreateKeys();
+            string encryptedMessage = rsa.Encrypt("test", 2);
+            string decryptedMessage = rsa.Decrypt(encryptedMessage, 2);
+            Console.WriteLine(decryptedMessage);
         }
     }
 
@@ -32,7 +38,7 @@ namespace RSA
             (int x, int xPrev, int y, int yPrev) = (0, 1, 1, 0);
             while (b != 0)
             {
-                int floorQuotient = a;
+                int floorQuotient = a / b;
                 (a, b) = (b, a - b * floorQuotient);
                 (xPrev, x) = (x, xPrev - x * floorQuotient);
                 (yPrev, y) = (y, yPrev - y * floorQuotient);
@@ -58,16 +64,16 @@ namespace RSA
         {
             try
             {
-                string[] file = File.ReadAllLines(@"Keys/public.txt"); // open file, read and close
-                int n = int.Parse(file[0]);
-                int e = int.Parse(file[1]);
+                string[] file = File.ReadAllLines(@"Keys\public.txt"); // open file, read and close
+                long n = long.Parse(file[0]);
+                long e = long.Parse(file[1]);
 
-                List<int> encryptedData = new List<int>();
-                int encryptedMessage = -1;
+                List<long> encryptedData = new List<long>();
+                long encryptedMessage = -1;
 
                 if (message.Length > 0)
                 {
-                    encryptedMessage = (int)message[0];
+                    encryptedMessage = message[0];
                 }
 
                 for (int i = 1; i < message.Length; i++)
@@ -77,13 +83,16 @@ namespace RSA
                         encryptedData.Add(encryptedMessage);
                         encryptedMessage = 0;
                     }
-                    encryptedMessage = encryptedMessage * 1000 + (int)(message[i]);
+                    encryptedMessage = encryptedMessage * 1000 + (message[i]);
                 }
                 encryptedData.Add(encryptedMessage);
 
                 for (int i = 0; i < encryptedData.Count; i++)
                 {
-                    encryptedData[i] = (int)Math.Pow(encryptedData[i], e) % n;
+                    //string dupa = ((BigInteger)Math.Pow(encryptedData[i], e) % n).ToString();
+                    //BigInteger testNumber = BigInteger.Parse("324545342452");
+                    //BigInteger testNumber = new BigInteger(Math.Pow(encryptedData[i], e) % n);
+                    encryptedData[i] = (long)(Math.Pow(encryptedData[i], e) % n);
                 }
 
                 return string.Join(" ", encryptedData);
@@ -123,6 +132,46 @@ namespace RSA
             }
 
             return message;
+        }
+
+        public void CreateKeys()
+        {
+            // Take random number from 1 to 50
+            //Random rand = new Random();
+            //int liczba1 = rand.Next(0, 10);
+            //int liczba2 = rand.Next(0, 10);
+
+            //string[] file = File.ReadAllLines("Prime Numbers/primeNumbers.txt");
+            //int p = int.Parse(file[liczba1]);
+            //int q = int.Parse(file[liczba2]);
+
+            int p = 13;
+            int q = 23;
+
+            int fi = (p - 1) * (q - 1);
+            //int e = CountE(fi);
+            int e = 103;
+            long n = p * q;
+
+            // tu jest syf
+            var result = ExtendedEuclideanAlgorithm(e, fi);
+            int NWD = result.a;
+            int x = result.xPrev;
+            int y = result.yPrev;
+
+            int d;
+            if (x < 0)
+            {
+                d = fi + x;
+            }
+            else
+            {
+                d = x;
+            }
+            // Public key: 
+            File.WriteAllLines(@"Keys/public.txt", new string[] { n.ToString(), e.ToString() });
+            // Private key"
+            File.WriteAllLines(@"Keys/private.txt", new string[] { n.ToString(), d.ToString() });
         }
     }
 }
