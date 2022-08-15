@@ -12,7 +12,7 @@ namespace RSA
         {
             RSA rsa = new RSA();
             // Create new keys:
-            rsa.CreateKeys();
+            //rsa.CreateKeys();
             string encryptedMessage = rsa.Encrypt("test", 2);
             string decryptedMessage = rsa.Decrypt(encryptedMessage, 2);
             Console.WriteLine(decryptedMessage);
@@ -60,11 +60,12 @@ namespace RSA
             }
         }
 
+        // working well I think
         public string Encrypt(string message, int size)
         {
             try
             {
-                string[] file = File.ReadAllLines(@"Keys\public.txt"); // open file, read and close
+                string[] file = File.ReadAllLines(@"Keys\publiczny.txt"); // open file, read and close
                 long n = long.Parse(file[0]);
                 long e = long.Parse(file[1]);
 
@@ -101,12 +102,12 @@ namespace RSA
 
         public string Decrypt(string DataBlock, int size)
         {
-            string[] file = File.ReadAllLines(@"Keys/private.txt");
+            string[] file = File.ReadAllLines(@"Keys/prywatny.txt");
             int n = int.Parse(file[0]);
             int d = int.Parse(file[1]);
 
             string[] DataBlockList = DataBlock.Split(" ");
-            List<int> DataBlockInt = new List<int>();
+            List<long> DataBlockInt = new List<long>();
 
             foreach (string item in DataBlockList)
             {
@@ -117,12 +118,12 @@ namespace RSA
 
             for (int i = 0; i < DataBlockInt.Count; i++)
             {
-                DataBlockInt[i] = (int)Math.Pow(DataBlockInt[i], d) % n;
+                DataBlockInt[i] = PowerAndModulo(DataBlockInt[i], d, n);
                 string x = string.Empty;
                 for (int j = 0; j < size; j++)
                 {
-                    x = (char)(DataBlockInt[j] % 1000) + x;
-                    DataBlockInt[j] /= 1000; // int_blok_danych[i] //= 1000
+                    x = (char)(DataBlockInt[i] % 1000) + x;
+                    DataBlockInt[i] /= 1000; // int_blok_danych[i] //= 1000
                 }
                 message += x;
             }
