@@ -85,17 +85,13 @@ namespace RSA
                     }
                     encryptedMessage = encryptedMessage * 1000 + (message[i]);
                 }
-                encryptedData.Add(encryptedMessage);
-
+                encryptedData.Add(encryptedMessage); //[101116, 115116]
                 for (int i = 0; i < encryptedData.Count; i++)
                 {
-                    //string dupa = ((BigInteger)Math.Pow(encryptedData[i], e) % n).ToString();
-                    //BigInteger testNumber = BigInteger.Parse("324545342452");
-                    //BigInteger testNumber = new BigInteger(Math.Pow(encryptedData[i], e) % n);
-                    encryptedData[i] = (long)(Math.Pow(encryptedData[i], e) % n);
+                    encryptedData[i] = PowerAndModulo(encryptedData[i], e, n);
                 }
 
-                return string.Join(" ", encryptedData);
+                return string.Join(" ", encryptedData); // "80 1"
             }
             catch (Exception)
             {
@@ -137,20 +133,20 @@ namespace RSA
         public void CreateKeys()
         {
             // Take random number from 1 to 50
-            //Random rand = new Random();
-            //int liczba1 = rand.Next(0, 10);
-            //int liczba2 = rand.Next(0, 10);
+            Random rand = new Random();
+            int liczba1 = rand.Next(0, 10);
+            int liczba2 = rand.Next(0, 10);
 
-            //string[] file = File.ReadAllLines("Prime Numbers/primeNumbers.txt");
-            //int p = int.Parse(file[liczba1]);
-            //int q = int.Parse(file[liczba2]);
+            string[] file = File.ReadAllLines("Prime Numbers/primeNumbers.txt");
+            int p = int.Parse(file[liczba1]);
+            int q = int.Parse(file[liczba2]);
 
-            int p = 13;
-            int q = 23;
+            //int p = 13;
+            //int q = 23;
 
             int fi = (p - 1) * (q - 1);
-            //int e = CountE(fi);
-            int e = 103;
+            int e = CountE(fi);
+            //int e = 103;
             long n = p * q;
 
             // tu jest syf
@@ -172,6 +168,23 @@ namespace RSA
             File.WriteAllLines(@"Keys/public.txt", new string[] { n.ToString(), e.ToString() });
             // Private key"
             File.WriteAllLines(@"Keys/private.txt", new string[] { n.ToString(), d.ToString() });
+        }
+
+        public static long PowerAndModulo(long x, long e, long m)
+        {
+            long result = 1;
+            x = x % m;
+            while (e > 0)
+            {
+                if (e % 2 == 1)
+                {
+                    result = (result * x) % m;
+                    e -= 1;
+                }
+                x = (x * x) % m;
+                e /= 2;
+            }
+            return result;
         }
     }
 }
