@@ -31,19 +31,37 @@ namespace RSA
 
     public class RSA
     {
-        public int GreatestCommonDivisor(int a, int b)
+        public int GreatestCommonDivisor(int firstNumber, int secondNumber)
         {
-            while (a != b)
+            while (firstNumber != secondNumber)
             {
-                if (a > b)
-                    a = a - b;
+                if (firstNumber > secondNumber)
+                    firstNumber = firstNumber - secondNumber;
                 else
-                    b = b - a;
+                    secondNumber = secondNumber - firstNumber;
             }
-            return a;
+            return firstNumber;
         }
 
-        public (int a, int xPrev, int yPrev) ExtendedEuclideanAlgorithm(int a, int b)
+        public static long PowerAndModulo(long x, long e, long m)
+        {
+            long result = 1;
+            x = x % m;
+            while (e > 0)
+            {
+                if (e % 2 == 1)
+                {
+                    result = (result * x) % m;
+                    e -= 1;
+                }
+                x = (x * x) % m;
+                e /= 2;
+            }
+
+            return result;
+        }
+
+        public int ExtendedEuclideanAlgorithm(int a, int b)
         {
             (int x, int xPrev, int y, int yPrev) = (0, 1, 1, 0);
             while (b != 0)
@@ -54,7 +72,7 @@ namespace RSA
                 (yPrev, y) = (y, yPrev - y * floorQuotient);
             }
 
-            return (a, xPrev, yPrev);
+            return xPrev;
         }
 
         public int CountE(int phi)
@@ -64,13 +82,10 @@ namespace RSA
             {
                 int e = rand.Next(2, phi);
                 if (GreatestCommonDivisor(e, phi) == 1)
-                {
                     return e;
-                }
             }
         }
 
-        // working well I think
         public string Encrypt(string message, int size)
         {
             try
@@ -83,9 +98,7 @@ namespace RSA
                 long encryptedMessage = -1;
 
                 if (message.Length > 0)
-                {
                     encryptedMessage = message[0];
-                }
 
                 for (int i = 1; i < message.Length; i++)
                 {
@@ -98,9 +111,7 @@ namespace RSA
                 }
                 encryptedData.Add(encryptedMessage); //[101116, 115116]
                 for (int i = 0; i < encryptedData.Count; i++)
-                {
                     encryptedData[i] = PowerAndModulo(encryptedData[i], e, n);
-                }
 
                 return string.Join(" ", encryptedData); // "80 1"
             }
@@ -120,9 +131,7 @@ namespace RSA
             List<long> DataBlockInt = new List<long>();
 
             foreach (string item in DataBlockList)
-            {
                 DataBlockInt.Add(int.Parse(item));
-            }
 
             string message = string.Empty;
 
@@ -140,7 +149,6 @@ namespace RSA
 
             return message;
         }
-
         public void CreateKeys()
         {
             // Take random number from 1 to 50
@@ -151,51 +159,22 @@ namespace RSA
             string[] file = File.ReadAllLines("Prime Numbers/primeNumbers.txt");
             int p = int.Parse(file[liczba1]);
             int q = int.Parse(file[liczba2]);
-
-            //int p = 13;
-            //int q = 23;
-
             int fi = (p - 1) * (q - 1);
             int e = CountE(fi);
-            //int e = 103;
             long n = p * q;
-
-            // tu jest syf
-            var result = ExtendedEuclideanAlgorithm(e, fi);
-            int NWD = result.a;
-            int x = result.xPrev;
-            int y = result.yPrev;
-
+            int x = ExtendedEuclideanAlgorithm(e, fi);
             int d;
+
             if (x < 0)
-            {
                 d = fi + x;
-            }
             else
-            {
                 d = x;
-            }
+
             // Public key: 
             File.WriteAllLines(@"Keys/public.txt", new string[] { n.ToString(), e.ToString() });
             // Private key"
             File.WriteAllLines(@"Keys/private.txt", new string[] { n.ToString(), d.ToString() });
-        }
-
-        public static long PowerAndModulo(long x, long e, long m)
-        {
-            long result = 1;
-            x = x % m;
-            while (e > 0)
-            {
-                if (e % 2 == 1)
-                {
-                    result = (result * x) % m;
-                    e -= 1;
-                }
-                x = (x * x) % m;
-                e /= 2;
-            }
-            return result;
+            Console.WriteLine("Keys has been created and stored in folder Keys");
         }
     }
 }
