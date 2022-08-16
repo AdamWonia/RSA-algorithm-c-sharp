@@ -10,12 +10,22 @@ namespace RSA
     {
         static void Main(string[] args)
         {
+            // Create an instance of RSA class:
             RSA rsa = new RSA();
-            // Create new keys:
-            //rsa.CreateKeys();
-            string encryptedMessage = rsa.Encrypt("test", 2);
-            string decryptedMessage = rsa.Decrypt(encryptedMessage, 2);
-            Console.WriteLine(decryptedMessage);
+            Console.WriteLine("Do you want to create new public and private keys? Choose Y or N:");
+            string answer = Console.ReadLine();
+            if (answer.ToLower().Equals("y"))
+                rsa.CreateKeys();
+            else if (answer.ToLower().Equals("n"))
+            {
+                Console.WriteLine("Insert message you want to encrypt");
+                string encyptedMessage = rsa.Encrypt(Console.ReadLine(), 2);
+                Console.WriteLine("Encrypted message is:\n{0}", encyptedMessage);
+                Console.WriteLine("Decrypting message...");
+                Console.WriteLine(rsa.Decrypt(encyptedMessage, 2));
+            }
+            else
+                Console.WriteLine("Input value is incorrect");
         }
     }
 
