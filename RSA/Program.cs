@@ -89,7 +89,7 @@ namespace RSA
         {
             try
             {
-                string[] file = File.ReadAllLines(@"Keys\public.txt"); // open file, read and close
+                string[] file = File.ReadAllLines(@"Keys\publiczny.txt"); // open file, read and close
                 long n = long.Parse(file[0]);
                 long e = long.Parse(file[1]);
 
@@ -122,7 +122,7 @@ namespace RSA
 
         public string Decrypt(string DataBlock, int size)
         {
-            string[] file = File.ReadAllLines(@"Keys/private.txt");
+            string[] file = File.ReadAllLines(@"Keys/prywatny.txt");
             int n = int.Parse(file[0]);
             int d = int.Parse(file[1]);
 
