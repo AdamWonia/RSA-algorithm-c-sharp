@@ -13,11 +13,12 @@ namespace RSA
             RSA rsa = new RSA();
             string publicKeyPath = @"Keys\public.txt";
             string privateKeyPath = @"Keys\private.txt";
+            string primeNumberPath = @"Prime Numbers/primeNumbers.txt";
 
             Console.WriteLine("Do you want to create a new public and private keys? Choose Y or N:");
             string answer = Console.ReadLine();
             if (answer.ToLower().Equals("y"))
-                rsa.CreateKeys();
+                rsa.CreateKeys(primeNumberPath);
             else if (answer.ToLower().Equals("n"))
             {
                 Console.WriteLine("Insert a message you want to encrypt: ");
@@ -90,12 +91,12 @@ namespace RSA
         {
             try
             {
-                List<long> encryptedData = new List<long>();
-
                 string[] file = File.ReadAllLines(publicKeyPath); // open file, read and close
                 long n = long.Parse(file[0]);
                 long e = long.Parse(file[1]);
                 long encryptedMessage = -1;
+
+                List<long> encryptedData = new List<long>();
 
                 if (message.Length > 0)
                     encryptedMessage = message[0];
@@ -124,10 +125,10 @@ namespace RSA
         public string Decrypt(string DataBlock, string privateKeyPath)
         {
             string[] file = File.ReadAllLines(privateKeyPath);
+            string[] DataBlockList = DataBlock.Split(" ");
             int n = int.Parse(file[0]);
             int d = int.Parse(file[1]);
 
-            string[] DataBlockList = DataBlock.Split(" ");
             List<long> DataBlockInt = new List<long>();
 
             foreach (string item in DataBlockList)
@@ -142,21 +143,20 @@ namespace RSA
                 for (int j = 0; j < 2; j++)
                 {
                     x = (char)(DataBlockInt[i] % 1000) + x;
-                    DataBlockInt[i] /= 1000; // int_blok_danych[i] //= 1000
+                    DataBlockInt[i] /= 1000;
                 }
                 message += x;
             }
-
             return message;
         }
-        public void CreateKeys()
+        public void CreateKeys(string primeNumbersPath)
         {
             // Take random number from 50 to 200
             Random rand = new Random();
             int liczba1 = rand.Next(50, 200);
             int liczba2 = rand.Next(50, 200);
 
-            string[] file = File.ReadAllLines("Prime Numbers/primeNumbers.txt");
+            string[] file = File.ReadAllLines(primeNumbersPath);
             int p = int.Parse(file[liczba1]);
             int q = int.Parse(file[liczba2]);
             int fi = (p - 1) * (q - 1);
@@ -170,9 +170,9 @@ namespace RSA
             else
                 d = x;
 
-            // Public key: 
+            // Create and store a public key: 
             File.WriteAllLines(@"Keys/public.txt", new string[] { n.ToString(), e.ToString() });
-            // Private key"
+            // Create and store a private key:
             File.WriteAllLines(@"Keys/private.txt", new string[] { n.ToString(), d.ToString() });
             Console.WriteLine("Keys has been created and stored in folder \"Keys\"");
         }
