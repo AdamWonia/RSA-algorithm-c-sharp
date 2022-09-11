@@ -11,6 +11,9 @@ namespace RSA
         static void Main(string[] args)
         {
             RSA rsa = new RSA();
+            string publicKeyPath = @"Keys\public.txt";
+            string privateKeyPath = @"Keys\private.txt";
+
             Console.WriteLine("Do you want to create a new public and private keys? Choose Y or N:");
             string answer = Console.ReadLine();
             if (answer.ToLower().Equals("y"))
@@ -18,10 +21,10 @@ namespace RSA
             else if (answer.ToLower().Equals("n"))
             {
                 Console.WriteLine("Insert a message you want to encrypt: ");
-                string encyptedMessage = rsa.Encrypt(Console.ReadLine(), 2);
+                string encyptedMessage = rsa.Encrypt(Console.ReadLine(), publicKeyPath);
                 Console.WriteLine("Encrypted message is:\n{0}", encyptedMessage);
                 Console.WriteLine("Decrypting message...");
-                Console.WriteLine(rsa.Decrypt(encyptedMessage, 2));
+                Console.WriteLine(rsa.Decrypt(encyptedMessage, privateKeyPath));
             }
             else
                 Console.WriteLine("Input value is incorrect");
@@ -30,7 +33,7 @@ namespace RSA
 
     public class RSA
     {
-        public int GreatestCommonDivisor(int firstNumber, int secondNumber)
+        private int GreatestCommonDivisor(int firstNumber, int secondNumber)
         {
             while (firstNumber != secondNumber)
             {
@@ -42,7 +45,7 @@ namespace RSA
             return firstNumber;
         }
 
-        public static long PowerAndModulo(long @base, long exp, long mod)
+        private static long PowerAndModulo(long @base, long exp, long mod)
         {
             long result = 1;
             @base = @base % mod;
@@ -56,11 +59,10 @@ namespace RSA
                 @base = (@base * @base) % mod;
                 exp /= 2;
             }
-
             return result;
         }
 
-        public int ExtendedEuclideanAlgorithm(int a, int b)
+        private int ExtendedEuclideanAlgorithm(int a, int b)
         {
             (int x, int xPrev, int y, int yPrev) = (0, 1, 1, 0);
             while (b != 0)
@@ -70,11 +72,10 @@ namespace RSA
                 (xPrev, x) = (x, xPrev - x * floorQuotient);
                 (yPrev, y) = (y, yPrev - y * floorQuotient);
             }
-
             return xPrev;
         }
 
-        public int CountE(int phi)
+        private int CountE(int phi)
         {
             Random rand = new Random();
             while (true)
@@ -85,15 +86,15 @@ namespace RSA
             }
         }
 
-        public string Encrypt(string message, int size)
+        public string Encrypt(string message, string publicKeyPath)
         {
             try
             {
-                string[] file = File.ReadAllLines(@"Keys\publiczny.txt"); // open file, read and close
+                List<long> encryptedData = new List<long>();
+
+                string[] file = File.ReadAllLines(publicKeyPath); // open file, read and close
                 long n = long.Parse(file[0]);
                 long e = long.Parse(file[1]);
-
-                List<long> encryptedData = new List<long>();
                 long encryptedMessage = -1;
 
                 if (message.Length > 0)
@@ -101,18 +102,18 @@ namespace RSA
 
                 for (int i = 1; i < message.Length; i++)
                 {
-                    if (i % size == 0)
+                    if (i % 2 == 0)
                     {
                         encryptedData.Add(encryptedMessage);
                         encryptedMessage = 0;
                     }
                     encryptedMessage = encryptedMessage * 1000 + (message[i]);
                 }
-                encryptedData.Add(encryptedMessage); //[101116, 115116]
+                encryptedData.Add(encryptedMessage);
                 for (int i = 0; i < encryptedData.Count; i++)
                     encryptedData[i] = PowerAndModulo(encryptedData[i], e, n);
 
-                return string.Join(" ", encryptedData); // "80 1"
+                return string.Join(" ", encryptedData);
             }
             catch (Exception)
             {
@@ -120,9 +121,9 @@ namespace RSA
             }
         }
 
-        public string Decrypt(string DataBlock, int size)
+        public string Decrypt(string DataBlock, string privateKeyPath)
         {
-            string[] file = File.ReadAllLines(@"Keys/prywatny.txt");
+            string[] file = File.ReadAllLines(privateKeyPath);
             int n = int.Parse(file[0]);
             int d = int.Parse(file[1]);
 
@@ -138,7 +139,7 @@ namespace RSA
             {
                 DataBlockInt[i] = PowerAndModulo(DataBlockInt[i], d, n);
                 string x = string.Empty;
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     x = (char)(DataBlockInt[i] % 1000) + x;
                     DataBlockInt[i] /= 1000; // int_blok_danych[i] //= 1000
@@ -150,10 +151,10 @@ namespace RSA
         }
         public void CreateKeys()
         {
-            // Take random number from 1 to 50
+            // Take random number from 50 to 200
             Random rand = new Random();
-            int liczba1 = rand.Next(0, 10);
-            int liczba2 = rand.Next(0, 10);
+            int liczba1 = rand.Next(50, 200);
+            int liczba2 = rand.Next(50, 200);
 
             string[] file = File.ReadAllLines("Prime Numbers/primeNumbers.txt");
             int p = int.Parse(file[liczba1]);
