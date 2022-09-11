@@ -10,15 +10,14 @@ namespace RSA
     {
         static void Main(string[] args)
         {
-            // Create an instance of RSA class:
             RSA rsa = new RSA();
-            Console.WriteLine("Do you want to create new public and private keys? Choose Y or N:");
+            Console.WriteLine("Do you want to create a new public and private keys? Choose Y or N:");
             string answer = Console.ReadLine();
             if (answer.ToLower().Equals("y"))
                 rsa.CreateKeys();
             else if (answer.ToLower().Equals("n"))
             {
-                Console.WriteLine("Insert message you want to encrypt");
+                Console.WriteLine("Insert a message you want to encrypt: ");
                 string encyptedMessage = rsa.Encrypt(Console.ReadLine(), 2);
                 Console.WriteLine("Encrypted message is:\n{0}", encyptedMessage);
                 Console.WriteLine("Decrypting message...");
@@ -43,19 +42,19 @@ namespace RSA
             return firstNumber;
         }
 
-        public static long PowerAndModulo(long x, long e, long m)
+        public static long PowerAndModulo(long @base, long exp, long mod)
         {
             long result = 1;
-            x = x % m;
-            while (e > 0)
+            @base = @base % mod;
+            while (exp > 0)
             {
-                if (e % 2 == 1)
+                if (exp % 2 == 1)
                 {
-                    result = (result * x) % m;
-                    e -= 1;
+                    result = (result * @base) % mod;
+                    exp -= 1;
                 }
-                x = (x * x) % m;
-                e /= 2;
+                @base = (@base * @base) % mod;
+                exp /= 2;
             }
 
             return result;
@@ -90,7 +89,7 @@ namespace RSA
         {
             try
             {
-                string[] file = File.ReadAllLines(@"Keys\publiczny.txt"); // open file, read and close
+                string[] file = File.ReadAllLines(@"Keys\public.txt"); // open file, read and close
                 long n = long.Parse(file[0]);
                 long e = long.Parse(file[1]);
 
@@ -123,7 +122,7 @@ namespace RSA
 
         public string Decrypt(string DataBlock, int size)
         {
-            string[] file = File.ReadAllLines(@"Keys/prywatny.txt");
+            string[] file = File.ReadAllLines(@"Keys/private.txt");
             int n = int.Parse(file[0]);
             int d = int.Parse(file[1]);
 
@@ -174,7 +173,7 @@ namespace RSA
             File.WriteAllLines(@"Keys/public.txt", new string[] { n.ToString(), e.ToString() });
             // Private key"
             File.WriteAllLines(@"Keys/private.txt", new string[] { n.ToString(), d.ToString() });
-            Console.WriteLine("Keys has been created and stored in folder Keys");
+            Console.WriteLine("Keys has been created and stored in folder \"Keys\"");
         }
     }
 }
