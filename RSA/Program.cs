@@ -34,16 +34,17 @@ namespace RSA
 
     public class RSA
     {
-        private int GreatestCommonDivisor(int firstNumber, int secondNumber)
+        private int GreatestCommonDivisor(int a, int b)
         {
-            while (firstNumber != secondNumber)
+            while (a != b)
             {
-                if (firstNumber > secondNumber)
-                    firstNumber = firstNumber - secondNumber;
+                if (a > b)
+                    a = a - b;
                 else
-                    secondNumber = secondNumber - firstNumber;
+                    b = b - a;
             }
-            return firstNumber;
+
+            return a;
         }
 
         private static long PowerAndModulo(long @base, long exp, long mod)
@@ -60,6 +61,7 @@ namespace RSA
                 @base = (@base * @base) % mod;
                 exp /= 2;
             }
+
             return result;
         }
 
@@ -73,6 +75,7 @@ namespace RSA
                 (xPrev, x) = (x, xPrev - x * floorQuotient);
                 (yPrev, y) = (y, yPrev - y * floorQuotient);
             }
+
             return xPrev;
         }
 
