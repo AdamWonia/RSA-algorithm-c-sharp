@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 
 namespace RSA
 {
@@ -154,7 +152,7 @@ namespace RSA
         }
         public void CreateKeys(string primeNumbersPath)
         {
-            // Take random number from 50 to 200
+            // Take random number from 50 to 200 - ensure large numbers
             Random rand = new Random();
             int liczba1 = rand.Next(50, 200);
             int liczba2 = rand.Next(50, 200);
