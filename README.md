@@ -17,6 +17,7 @@ The RSA algorithm is very difficult to break. Its security is based on the diffi
 
 1. Select two large prime numbers *x* and *y*.
 2. Calculate $n = x * y$
+3. Calculate the *totient* function $\phi$(n) = 
 
 # Launch
 
