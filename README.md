@@ -23,9 +23,9 @@ The RSA algorithm is very difficult to break. Its security is based on the diffi
 6. Calculate *d* such that $(d * e) mod \phi(n) = 1$. It can be found using the extended euclidean algorithm.
 7. Create the private key as a pair of numbers (*n*, *d*).
 
-## Encryption process
+### Encryption process
 
-## Decryption process
+### Decryption process
 
 # Launch
 
