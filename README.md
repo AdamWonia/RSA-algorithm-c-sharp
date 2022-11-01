@@ -16,11 +16,16 @@ The RSA algorithm is very difficult to break. Its security is based on the diffi
 ## Generate the keys:
 
 1. Select two large prime numbers *x* and *y*.
-2. Calculate $n = x * y$
-3. Calculate the *totient* function $\phi(n) = (x-1)(y-1)$ 
+2. Calculate $n = x * y$.
+3. Calculate the *totient* function $\phi(n) = (x-1)(y-1)$.
 4. Select an integer *e* that is co-prime to $\phi(n)$ and 1 < *e* < $\phi(n)$. Two integers are co-prime if the only positive integer that divides them is 1.
 5. Create the public key as a pair of numbers (*n*, *e*).
-6. Calculate *d* such that $(d * e) &nbsp; mod &nbsp; \phi(n) = 1$
+6. Calculate *d* such that $(d * e) mod \phi(n) = 1$. It can be found using the extended euclidean algorithm.
+7. Create the private key as a pair of numbers (*n*, *d*).
+
+## Encryption process
+
+## Decryption process
 
 # Launch
 
