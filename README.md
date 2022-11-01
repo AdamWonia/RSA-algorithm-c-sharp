@@ -11,9 +11,12 @@ The user of the RSA algorithm creates a public key based on two large prime numb
 
 The RSA algorithm is very difficult to break. Its security is based on the difficulty of factorizing the product of two large prime numbers. Multiplying the two numbers is easy, but determining the original prime numbers from the sum (factorization) is considered unfeasible. This problem is known as the RSA problem. The algorithm is relatively slow in operation, and as a result, it is not as widely used.
  
-# Operation
+# How it works?
 
-TODO
+## Generate the keys:
+
+1. Select two large prime numbers *x* and *y*.
+2. Calculate $ n = x * y $
 
 # Launch
 
