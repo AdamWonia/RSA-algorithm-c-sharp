@@ -16,7 +16,7 @@ The RSA algorithm is very difficult to break. Its security is based on the diffi
 ## Generate the keys:
 
 1. Select two large prime numbers *x* and *y*.
-2. Calculate $ n = x * y $
+2. Calculate $$ n = x * y $$
 
 # Launch
 
