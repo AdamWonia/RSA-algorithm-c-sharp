@@ -25,6 +25,10 @@ The RSA algorithm is very difficult to break. Its security is based on the diffi
 
 ### Encryption process
 
+The plaintext message M is encrypted with a public key. To get the ciphertext from the plaintext, use the following formula to get the ciphertext C.
+
+$$C = P^e mod n$$
+
 ### Decryption process
 
 # Launch
