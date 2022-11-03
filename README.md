@@ -44,5 +44,5 @@ $$P = C^d &ensp; mod &ensp; n$$
 The description is based on the sources listed below.
 1. https://www.educative.io/answers/what-is-the-rsa-algorithm
 2. https://en.wikipedia.org/wiki/RSA_(cryptosystem)
-3. geeksforgeeks.org/rsa-algorithm-cryptography/
+3. https://www.geeksforgeeks.org/rsa-algorithm-cryptography/
 4. https://www.techtarget.com/searchsecurity/definition/RSA
