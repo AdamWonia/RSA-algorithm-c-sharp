@@ -44,6 +44,7 @@ TODO:
 - give info where keys should be stored by default
 - mention primeNumbers.txt file
 - and how to use it
+- smth about ext Euc alg and other methods
 
 # Sources
 
