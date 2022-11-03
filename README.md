@@ -20,16 +20,20 @@ The RSA algorithm is very difficult to break. Its security is based on the diffi
 3. Calculate the *totient* function $\phi(n) = (x-1)(y-1)$.
 4. Select an integer *e* that is co-prime to $\phi(n)$ and 1 < *e* < $\phi(n)$. Two integers are co-prime if the only positive integer that divides them is 1.
 5. Create the public key as a pair of numbers (*n*, *e*).
-6. Calculate *d* such that $(d * e) mod \phi(n) = 1$. It can be found using the extended euclidean algorithm.
+6. Calculate *d* such that $(d * e) &ensp; mod &ensp; \phi(n) = 1$. It can be found using the extended euclidean algorithm.
 7. Create the private key as a pair of numbers (*n*, *d*).
 
 ### Encryption process
 
 The plaintext message M is encrypted with a public key. To get the ciphertext from the plaintext, use the following formula to get the ciphertext C.
 
-$$C = P^e&ensp;mod&ensp;n$$
+$$C = P^e &ensp; mod &ensp; n$$
 
 ### Decryption process
+
+To decrypt the message the private key is used. The plaintext P can be found using following formula.
+
+$$P = C^d &ensp; mod &ensp; n$$
 
 # Launch
 
