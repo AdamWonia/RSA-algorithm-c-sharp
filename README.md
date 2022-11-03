@@ -37,7 +37,13 @@ $$P = C^d &ensp; mod &ensp; n$$
 
 # Launch
 
+To run the program, you can open the project using the Visual Studio IDE and just click the Run button or go to the S7_TicTacToe_challenge\bin\Debug folder, where there is a S7_TicTacToe_challenge.exe file that you can run directly.
 
+TODO:
+- describe menu options
+- give info where keys should be stored by default
+- mention primeNumbers.txt file
+- and how to use it
 
 # Sources
 
