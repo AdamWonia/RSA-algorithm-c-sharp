@@ -37,14 +37,11 @@ $$P = C^d &ensp; mod &ensp; n$$
 
 # Launch
 
-To run the program, you can open the project using the Visual Studio IDE and just click the Run button or go to the S7_TicTacToe_challenge\bin\Debug folder, where there is a S7_TicTacToe_challenge.exe file that you can run directly.
+To run the program, you can open the project using the Visual Studio IDE and simply click Run, or you can navigate to the RSA folder, where there is an RSA.exe file that you can run directly.
 
-TODO:
-- describe menu options
-- give info where keys should be stored by default
-- mention primeNumbers.txt file
-- and how to use it
-- smth about ext Euc alg and other methods
+Before running the program, the public and private key directory and the **primeNumbers.txt** file with prime numbers (needed to generate new keys) must be provided.
+
+After starting the program, the user will see the start menu. At first, the user is asked to generate new keys. If you press *yes*, new keys will be generated and stored in a specific location that you have to determine. If you choose *no*, existing keys will be used. Note that the keys must exist before using the application. In the next steps you will be asked to enter the message to be encrypted with the RSA algorithm. After that, the decryption process will start automatically. The menu is a basic structure used only to check if the program works correctly. You have the possibility to edit it and create your own options.
 
 # Sources
 
